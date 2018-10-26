@@ -31,6 +31,15 @@ Nginx服务器的基本模块：（3个）
 	
 	
 	
-	
+alias与root指令的区别：
+	location  /i/(.*)$ {
+		alias  /spool/w3/images/;
+	}
+	location /m/(.*)$ {
+		root   /spool/w3/images/;
+	}
 
+两者最终的访问路径不同，
+	alias指令访问到的最终路径是：/spool/w3/images/$1
+	root指令访问到的最终路径是：/spool/w3/images/m/$1
 	
