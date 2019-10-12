@@ -1,0 +1,159 @@
+Proxy_Pass
+Proxy_pass反向代理，用的是nginx的Proxy模块。
+
+第一种：
+location /proxy/ {
+    proxy_pass http://127.0.0.1/;
+}
+代理到URL：http://127.0.0.1/test.html
+
+
+第二种：
+location /proxy/ {
+    proxy_pass http://127.0.0.1;  #少/
+}
+代理到URL：http://127.0.0.1/proxy/test.html
+
+
+第三种：
+location /proxy/ {
+    proxy_pass http://127.0.0.1/aaa/;
+}
+代理到URL：http://127.0.0.1/aaa/test.html
+
+
+第四种（相对于第三种，最后少一个 / ）
+location /proxy/ {
+    proxy_pass http://127.0.0.1/aaa;
+}
+代理到URL：http://127.0.0.1/aaatest.html
+
+- proxy_set_header  Host  $host;  作用web服务器上有多个站点时，用该参数header来区分反向代理哪个域名。比如下边的代码举例。
+- proxy_set_header X-Forwarded-For  $remote_addr; 作用是后端服务器上的程序获取访客真实IP，从该header头获取。部分程序需要该功能。
+
+
+
+
+
+Nginx负载均衡的几种模式
+轮询：每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，就不在分配；
+
+权重轮询：根据后端服务器性能不通配置轮询的权重比，权重越高访问的比重越高；
+upstream core_tomcat {
+    server 192.168.1.253:80      weight=2  max_fails=3 fail_timeout=30;
+    server 192.168.1.252:80      weight=8  max_fails=3 fail_timeout=30;
+}
+#假如有十个请求，八个会指向第二台服务器，两个指向第一台；
+
+
+IP_Hash：根据请求的ip地址hash结果进行分配，第一次分配到A服务器，后面再请求默认还是分配到A服务器；可以解决Session失效重新登录问题；
+upstream core_tomcat {
+  ip_hash;
+  server 192.168.1.253:80      max_fails=3 fail_timeout=30;
+  server 192.168.1.252:80      max_fails=3 fail_timeout=30;
+}
+
+Fair：按后端服务器的响应时间来分配请求，响应时间短的优先分配；
+upstream core_tomcat {
+  fair;
+  server 192.168.1.253:80      max_fails=3 fail_timeout=30;
+  server 192.168.1.252:80      max_fails=3 fail_timeout=30;
+}
+
+Url_hash：按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效；
+upstream core_tomcat {
+  hash  $request_uri；
+  server 192.168.1.253:80      max_fails=3 fail_timeout=30;
+  server 192.168.1.252:80      max_fails=3 fail_timeout=30;
+}
+
+
+
+proxy_pass
+
+Syntax:    proxy_pass URL;
+Default:    —
+Context:    location, if in location, limit_except
+不影响浏览器地址栏的url
+
+设置被代理server的协议和地址，URI可选（可以有，也可以没有）
+
+协议可以为http或https
+
+地址可以为域名或者IP，端口可选；eg：
+
+ proxy_pass http://localhost:8000/uri/;
+ 如果一个域名可以解析到多个地址，那么这些地址会被轮流使用，此外，还可以把一个地址指定为 server group（如：nginx的upstream）, eg:
+
+upstream backend {
+    server backend1.example.com       weight=5;
+    server backend2.example.com:8080;
+    server unix:/tmp/backend3;
+ 
+    server backup1.example.com:8080   backup;
+    server backup2.example.com:8080   backup;
+}
+ 
+server {
+    location / {
+        proxy_pass http://backend;    }
+}
+server name， port， URI支持变量的形式，eg：
+
+proxy_pass http://$host$uri;
+这种情况下，nginx会在server groups（upstream后端server）里搜索server name，如果没有找到，会用dns解析
+
+请求的URI按照下面的规则传给后端server
+
+如果proxy_pass的URL定向里包括URI，那么请求中匹配到location中URI的部分会被proxy_pass后面URL中的URI替换，eg：
+
+location /name/ {
+    proxy_pass http://127.0.0.1/remote/;}
+请求http://127.0.0.1/name/test.html 会被代理到http://example.com/remote/test.html
+如果proxy_pass的URL定向里不包括URI，那么请求中的URI会保持原样传送给后端server，eg：
+
+location /name/ {
+    proxy_pass http://127.0.0.1;}
+
+请求http://127.0.0.1/name/test.html 会被代理到http://127.0.0.1/name/test.html
+ 一些情况下，不能确定替换的URI
+
+
+location里是正则表达式，这种情况下，proxy_pass里最好不要有URI
+
+在proxy_pass前面用了rewrite，如下，这种情况下，proxy_pass是无效的，eg：
+
+location /name/ {
+    rewrite    /name/([^/]+) /users?name=$1 break;
+    proxy_pass http://127.0.0.1;}
+	
+	
+	
+weight ： 权重越高，其获取request量越大，轮询权值也是可以用在ip_hash的，默认值为1
+
+max_fails ： 允许请求失败的次数，默认为1。当超过最大次数时，返回proxy_next_upstream 模块定义的错误。
+
+fail_timeout ： 有两层含义，一是在 30s 时间内最多容许 2 次失败；二是在经历了 2 次失败以后，30s时间内不分配请求到这台服务器。重试的最长时间，默认位10s；nginx重试时，如果在“fail_timeout”时间内server仍没有链接成功，或者max_fails次数达到上限，那么此server将会标记为“failed”。
+
+backup ： 预留的备份机器。当其他所有的非backup机器出现故障的时候，才会请求backup机器，因此这台机器的压力最轻。（为什么我的1.6.3版本里配置backup启动nginx时说invalid parameter "backup"？）
+max_conns： 限制同时连接到某台后端服务器的连接数，默认为0即无限制。因为queue指令是commercial，所以还是保持默认吧。
+
+proxy_next_upstream ： 这个指令属于 http_proxy 模块的，指定后端返回什么样的异常响应时，使用另一个realserver
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
