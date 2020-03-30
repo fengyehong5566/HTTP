@@ -1,67 +1,100 @@
 ReWriteÓï·¨
-	ÖØĞ´¹æÔòÓï·¨£º rewrite ÕıÔò Ìæ»» ±êÖ¾Î»
-	syntax: rewrite regex replacement [flag]
-	Context: server, location, if
+    syntax:  rewrite  regex  replacement  [flag]
+    Context: server, location, if
+    
+    regex£º¿ÉÒÔÊ¹×Ö·û´®»òÕßÕıÔòÀ´±íÊ¾ÏëÒªÆ¥ÅäµÄÄ¿±êurl
+    replacement£º½«ÕıÔòÆ¥ÅäµÄÄÚÈİÌæ»»³Éreplacement
+    flag±êÖ¾£º
+        last ¨C »ù±¾ÉÏ¶¼ÓÃÕâ¸öFlag¡£
+            ½áÊøµ±Ç°µÄÇëÇó´¦Àí£¬ÓÃÌæ»»ºóµÄURIÖØĞÂÆ¥Åälocation£»
+            ¿ÉÀí½âÎªÖØĞ´£¨rewrite£©ºó£¬·¢ÆğÁËÒ»¸öĞÂÇëÇó£¬½øÈëserverÄ£¿é£¬Æ¥Åälocation£»
+            Èç¹ûÖØĞÂÆ¥ÅäÑ­»·µÄ´ÎÊı³¬¹ı10´Î£¬nginx»á·µ»Ø500´íÎó£»
+            ·µ»Ø302 http×´Ì¬Âë £»
+            ä¯ÀÀÆ÷µØÖ·À¸ÏÔÊ¾ÖØµØÏòºóµÄurl
+            Ïàµ±ÓÚApacheµÄ[L]±ê¼Ç£¬±íÊ¾rewrite
 
-flag±êÖ¾£º
-	last ¨C »ù±¾ÉÏ¶¼ÓÃÕâ¸öFlag¡£
-		½áÊøµ±Ç°µÄÇëÇó´¦Àí£¬ÓÃÌæ»»ºóµÄURIÖØĞÂÆ¥Åälocation£»
-		¿ÉÀí½âÎªÖØĞ´£¨rewrite£©ºó£¬·¢ÆğÁËÒ»¸öĞÂÇëÇó£¬½øÈëserverÄ£¿é£¬Æ¥Åälocation£»
-		Èç¹ûÖØĞÂÆ¥ÅäÑ­»·µÄ´ÎÊı³¬¹ı10´Î£¬nginx»á·µ»Ø500´íÎó£»
-		·µ»Ø302 http×´Ì¬Âë £»
-		ä¯ÀÀÆ÷µØÖ·À¸ÏÔÊ¾ÖØµØÏòºóµÄurl
-		Ïàµ±ÓÚApacheµÄ[L]±ê¼Ç£¬±íÊ¾rewrite
+        break ¨C ÖĞÖ¹Rewirte£¬²»ÔÚ¼ÌĞøÆ¥Åä
+            ½áÊøµ±Ç°µÄÇëÇó´¦Àí£¬Ê¹ÓÃµ±Ç°×ÊÔ´£¬²»ÔÚÖ´ĞĞlocationÀïÓàÏÂµÄÓï¾ä£»
+            ·µ»Ø302 http×´Ì¬Âë £»
+            ä¯ÀÀÆ÷µØÖ·À¸ÏÔÊ¾ÖØµØÏòºóµÄurl
 
-	break ¨C ÖĞÖ¹Rewirte£¬²»ÔÚ¼ÌĞøÆ¥Åä
-		½áÊøµ±Ç°µÄÇëÇó´¦Àí£¬Ê¹ÓÃµ±Ç°×ÊÔ´£¬²»ÔÚÖ´ĞĞlocationÀïÓàÏÂµÄÓï¾ä£»
-		·µ»Ø302 http×´Ì¬Âë £»
-		ä¯ÀÀÆ÷µØÖ·À¸ÏÔÊ¾ÖØµØÏòºóµÄurl
+        redirect ¨C ·µ»ØÁÙÊ±ÖØ¶¨ÏòµÄHTTP×´Ì¬302
+            ÁÙÊ±Ìø×ª£¬·µ»Ø302 http×´Ì¬Âë£»
+            Èç¹ûreplacement²»ÊÇ"http://"¡¢"https://"¡¢"$scheme"¿ªÍ·£¬ÔòÊ¹ÓÃ
+            ä¯ÀÀÆ÷µØÖ·À¸ÏÔÊ¾ÖØµØÏòºóµÄurl
 
-	redirect ¨C ·µ»ØÁÙÊ±ÖØ¶¨ÏòµÄHTTP×´Ì¬302
-		ÁÙÊ±Ìø×ª£¬·µ»Ø302 http×´Ì¬Âë£»
-		ä¯ÀÀÆ÷µØÖ·À¸ÏÔÊ¾ÖØµØÏòºóµÄurl
+        permanent ¨C ·µ»ØÓÀ¾ÃÖØ¶¨ÏòµÄHTTP×´Ì¬301
+            ÓÀ¾ÃÌø×ª£¬·µ»Ø301 http×´Ì¬Âë£»
+            ä¯ÀÀÆ÷µØÖ·À¸ÏÔÊ¾ÖØ¶¨ÏòºóµÄurl
 
-	permanent ¨C ·µ»ØÓÀ¾ÃÖØ¶¨ÏòµÄHTTP×´Ì¬301
-		ÓÀ¾ÃÌø×ª£¬·µ»Ø301 http×´Ì¬Âë£»
-		ä¯ÀÀÆ÷µØÖ·À¸ÏÔÊ¾ÖØ¶¨ÏòºóµÄurl
+Flag£ºflag±êÊ¾£¬ÖØĞ´ÀàĞÍ£º
+  - last£º±¾Ìõ¹æÔòÆ¥ÅäÍê³Éºó£¬¼ÌĞøÏòÏÂÆ¥ÅäĞÂµÄlocation URI¹æÔò£»Ïàµ±ÓÚApacheÀïµÂ(L)±ê¼Ç£¬±íÊ¾Íê³Érewrite£¬ä¯ÀÀÆ÷µØÖ·À¸URLµØÖ·²»±ä£»Ò»°ãĞ´ÔÚserverºÍifÖĞ;
+  - break£º±¾Ìõ¹æÔòÆ¥ÅäÍê³Éºó£¬ÖÕÖ¹Æ¥Åä£¬²»ÔÙÆ¥ÅäºóÃæµÄ¹æÔò£¬ä¯ÀÀÆ÷µØÖ·À¸URLµØÖ·²»±ä£»Ò»°ãÊ¹ÓÃÔÚlocationÖĞ£»
+  - redirect£º·µ»Ø302ÁÙÊ±ÖØ¶¨Ïò£¬ä¯ÀÀÆ÷µØÖ·»áÏÔÊ¾Ìø×ªºóµÄURLµØÖ·£»
+  - permanent£º·µ»Ø301ÓÀ¾ÃÖØ¶¨Ïò£¬ä¯ÀÀÆ÷µØÖ·À¸»áÏÔÊ¾Ìø×ªºóµÄURLµØÖ·£»
 
-ÒòÎª301ºÍ302²»ÄÜ¼òµ¥µÄÖ»·µ»Ø×´Ì¬Âë£¬»¹±ØĞëÓĞÖØ¶¨ÏòµÄURL£¬Õâ¾ÍÊÇreturnÖ¸ÁîÎŞ·¨·µ»Ø301,302µÄÔ­ÒòÁË¡£ÕâÀï last ºÍ break Çø±ğÓĞµãÄÑÒÔÀí½â£º
 
-lastÒ»°ãĞ´ÔÚserverºÍifÖĞ£¬¶øbreakÒ»°ãÊ¹ÓÃÔÚlocationÖĞ
-last²»ÖÕÖ¹ÖØĞ´ºóµÄurlÆ¥Åä£¬¼´ĞÂµÄurl»áÔÙ´Óserver×ßÒ»±éÆ¥ÅäÁ÷³Ì£¬¶øbreakÖÕÖ¹ÖØĞ´ºóµÄÆ¥Åä
-breakºÍlast¶¼ÄÜ×éÖ¯¼ÌĞøÖ´ĞĞºóÃæµÄrewriteÖ¸Áî
+ÒòÎª301ºÍ302²»ÄÜ¼òµ¥µÄÖ»·µ»Ø×´Ì¬Âë£¬»¹±ØĞëÓĞÖØ¶¨ÏòµÄURL£¬Õâ¾ÍÊÇreturnÖ¸ÁîÎŞ·¨·µ»Ø301,302µÄÔ­ÒòÁË¡£
+last ºÍ break Çø±ğ£º
+    lastÒ»°ãĞ´ÔÚserverºÍifÖĞ£¬¶øbreakÒ»°ãÊ¹ÓÃÔÚlocationÖĞ
+    last²»ÖÕÖ¹ÖØĞ´ºóµÄurlÆ¥Åä£¬¼´ĞÂµÄurl»áÔÙ´Óserver×ßÒ»±éÆ¥ÅäÁ÷³Ì£¬¶øbreakÖÕÖ¹ÖØĞ´ºóµÄÆ¥Åä
+    breakºÍlast¶¼ÄÜ×èÖ¹¼ÌĞøÖ´ĞĞºóÃæµÄrewriteÖ¸Áî
+
+server {
+    # ·ÃÎÊ /last.html µÄÊ±ºò£¬Ò³ÃæÄÚÈİÖØĞ´µ½ /index.html ÖĞ£¬²¢¼ÌĞøºóÃæµÄÆ¥Åä£¬ä¯ÀÀÆ÷µØÖ·À¸URLµØÖ·²»±ä
+    rewrite /last.html /index.html last;
+
+    # ·ÃÎÊ /break.html µÄÊ±ºò£¬Ò³ÃæÄÚÈİÖØĞ´µ½ /index.html ÖĞ£¬²¢Í£Ö¹ºóĞøµÄÆ¥Åä£¬ä¯ÀÀÆ÷µØÖ·À¸URLµØÖ·²»±ä£»
+    rewrite /break.html /index.html break;
+
+    # ·ÃÎÊ /redirect.html µÄÊ±ºò£¬Ò³ÃæÖ±½Ó302¶¨Ïòµ½ /index.htmlÖĞ£¬ä¯ÀÀÆ÷µØÖ·URLÌøÎªindex.html
+    rewrite /redirect.html /index.html redirect;
+
+    # ·ÃÎÊ /permanent.html µÄÊ±ºò£¬Ò³ÃæÖ±½Ó301¶¨Ïòµ½ /index.htmlÖĞ£¬ä¯ÀÀÆ÷µØÖ·URLÌøÎªindex.html
+    rewrite /permanent.html /index.html permanent;
+
+    # °Ñ /html/*.html => /post/*.html £¬301¶¨Ïò
+    rewrite ^/html/(.+?).html$ /post/$1.html permanent;
+
+    # °Ñ /search/key => /search.html?keyword=key
+    rewrite ^/search\/([^\/]+?)(\/|$) /search.html?keyword=$1 permanent;
+  
+    # °Ñµ±Ç°ÓòÃûµÄÇëÇó£¬Ìø×ªµ½ĞÂÓòÃûÉÏ£¬ÓòÃû±ä»¯µ«Â·¾¶²»±ä
+    rewrite ^/(.*) http://www.jd.com/$1 permanent;
+}
+
 
 1¡¢ÏÂÃæÊÇ¿ÉÒÔÓÃÀ´ÅĞ¶ÏµÄ±í´ïÊ½£º
-	-fºÍ!-fÓÃÀ´ÅĞ¶ÏÊÇ·ñ´æÔÚÎÄ¼ş
-	-dºÍ!-dÓÃÀ´ÅĞ¶ÏÊÇ·ñ´æÔÚÄ¿Â¼
-	-eºÍ!-eÓÃÀ´ÅĞ¶ÏÊÇ·ñ´æÔÚÎÄ¼ş»òÄ¿Â¼
-	-xºÍ!-xÓÃÀ´ÅĞ¶ÏÎÄ¼şÊÇ·ñ¿ÉÖ´ĞĞ
+    -fºÍ!-fÓÃÀ´ÅĞ¶ÏÊÇ·ñ´æÔÚÎÄ¼ş
+    -dºÍ!-dÓÃÀ´ÅĞ¶ÏÊÇ·ñ´æÔÚÄ¿Â¼
+    -eºÍ!-eÓÃÀ´ÅĞ¶ÏÊÇ·ñ´æÔÚÎÄ¼ş»òÄ¿Â¼
+    -xºÍ!-xÓÃÀ´ÅĞ¶ÏÎÄ¼şÊÇ·ñ¿ÉÖ´ĞĞ
 
 2¡¢ÏÂÃæÊÇ¿ÉÒÔÓÃ×÷ÅĞ¶ÏµÄÈ«¾Ö±äÁ¿
-	$args #Õâ¸ö±äÁ¿µÈÓÚÇëÇóĞĞÖĞµÄ²ÎÊı¡£
-	$content_length #ÇëÇóÍ·ÖĞµÄContent-length×Ö¶Î¡£
-	$content_type #ÇëÇóÍ·ÖĞµÄContent-Type×Ö¶Î¡£
-	$document_root #µ±Ç°ÇëÇóÔÚrootÖ¸ÁîÖĞÖ¸¶¨µÄÖµ¡£
-	$host #ÇëÇóÖ÷»úÍ·×Ö¶Î£¬·ñÔòÎª·şÎñÆ÷Ãû³Æ¡£
-	$http_user_agent #¿Í»§¶ËagentĞÅÏ¢
-	$http_cookie #¿Í»§¶ËcookieĞÅÏ¢
-	$limit_rate #Õâ¸ö±äÁ¿¿ÉÒÔÏŞÖÆÁ¬½ÓËÙÂÊ¡£
-	$request_body_file #¿Í»§¶ËÇëÇóÖ÷ÌåĞÅÏ¢µÄÁÙÊ±ÎÄ¼şÃû¡£
-	$request_method #¿Í»§¶ËÇëÇóµÄ¶¯×÷£¬Í¨³£ÎªGET»òPOST¡£
-	$remote_addr #¿Í»§¶ËµÄIPµØÖ·¡£
-	$remote_port #¿Í»§¶ËµÄ¶Ë¿Ú¡£
-	$remote_user #ÒÑ¾­¾­¹ıAuth Basic ModuleÑéÖ¤µÄÓÃ»§Ãû¡£
-	$request_filename #µ±Ç°ÇëÇóµÄÎÄ¼şÂ·¾¶£¬ÓÉroot»òaliasÖ¸ÁîÓëURIÇëÇóÉú³É¡£
-	$query_string #Óë$argsÏàÍ¬¡£
-	$scheme #HTTP·½·¨£¨Èçhttp£¬https£©¡£
-	$server_protocol #ÇëÇóÊ¹ÓÃµÄĞ­Òé£¬Í¨³£ÊÇHTTP/1.0»òHTTP/1.1¡£
-	$server_addr #·şÎñÆ÷µØÖ·£¬ÔÚÍê³ÉÒ»´ÎÏµÍ³µ÷ÓÃºó¿ÉÒÔÈ·¶¨Õâ¸öÖµ¡£
-	$server_name #·şÎñÆ÷Ãû³Æ¡£
-	$server_port #ÇëÇóµ½´ï·şÎñÆ÷µÄ¶Ë¿ÚºÅ¡£
-	$request_uri #°üº¬ÇëÇó²ÎÊıµÄÔ­Ê¼URI£¬²»°üº¬Ö÷»úÃû£¬Èç£º¡±/foo/bar.php?arg=baz¡±¡£
-	$uri #²»´øÇëÇó²ÎÊıµÄµ±Ç°URI£¬$uri²»°üº¬Ö÷»úÃû£¬Èç¡±/foo/bar.html¡±¡£
-	$document_uri #Óë$uriÏàÍ¬¡£
-	
+    $args #Õâ¸ö±äÁ¿µÈÓÚÇëÇóĞĞÖĞµÄ²ÎÊı¡£
+    $content_length #ÇëÇóÍ·ÖĞµÄContent-length×Ö¶Î¡£
+    $content_type #ÇëÇóÍ·ÖĞµÄContent-Type×Ö¶Î¡£
+    $document_root #µ±Ç°ÇëÇóÔÚrootÖ¸ÁîÖĞÖ¸¶¨µÄÖµ¡£
+    $host #ÇëÇóÖ÷»úÍ·×Ö¶Î£¬·ñÔòÎª·şÎñÆ÷Ãû³Æ¡£
+    $http_user_agent #¿Í»§¶ËagentĞÅÏ¢
+    $http_cookie #¿Í»§¶ËcookieĞÅÏ¢
+    $limit_rate #Õâ¸ö±äÁ¿¿ÉÒÔÏŞÖÆÁ¬½ÓËÙÂÊ¡£
+    $request_body_file #¿Í»§¶ËÇëÇóÖ÷ÌåĞÅÏ¢µÄÁÙÊ±ÎÄ¼şÃû¡£
+    $request_method #¿Í»§¶ËÇëÇóµÄ¶¯×÷£¬Í¨³£ÎªGET»òPOST¡£
+    $remote_addr #¿Í»§¶ËµÄIPµØÖ·¡£
+    $remote_port #¿Í»§¶ËµÄ¶Ë¿Ú¡£
+    $remote_user #ÒÑ¾­¾­¹ıAuth Basic ModuleÑéÖ¤µÄÓÃ»§Ãû¡£
+    $request_filename #µ±Ç°ÇëÇóµÄÎÄ¼şÂ·¾¶£¬ÓÉroot»òaliasÖ¸ÁîÓëURIÇëÇóÉú³É¡£
+    $query_string #Óë$argsÏàÍ¬¡£
+    $scheme #HTTP·½·¨£¨Èçhttp£¬https£©¡£
+    $server_protocol #ÇëÇóÊ¹ÓÃµÄĞ­Òé£¬Í¨³£ÊÇHTTP/1.0»òHTTP/1.1¡£
+    $server_addr #·şÎñÆ÷µØÖ·£¬ÔÚÍê³ÉÒ»´ÎÏµÍ³µ÷ÓÃºó¿ÉÒÔÈ·¶¨Õâ¸öÖµ¡£
+    $server_name #·şÎñÆ÷Ãû³Æ¡£
+    $server_port #ÇëÇóµ½´ï·şÎñÆ÷µÄ¶Ë¿ÚºÅ¡£
+    $request_uri #°üº¬ÇëÇó²ÎÊıµÄÔ­Ê¼URI£¬²»°üº¬Ö÷»úÃû£¬Èç£º¡±/foo/bar.php?arg=baz¡±¡£
+    $uri #²»´øÇëÇó²ÎÊıµÄµ±Ç°URI£¬$uri²»°üº¬Ö÷»úÃû£¬Èç¡±/foo/bar.html¡±¡£
+    $document_uri #Óë$uriÏàÍ¬¡£
+    
 Àı£ºhttp://localhost:88/test1/test2/test.php
 $host£ºlocalhost
 $server_port£º88
@@ -71,57 +104,25 @@ $document_root£ºD:\nginx/html
 $request_filename£ºD:\nginx/html/test1/test2/test.php
 
 
-syntax: rewrite regex replacement [flag]
-Context: server, location, if
-
 Èç¹ûÕıÔò±í´ïÊ½£¨regex£©Æ¥Åäµ½ÁËÇëÇóµÄURI£¨request URI£©£¬Õâ¸öURI»á±»ºóÃæµÄreplacementÌæ»»
 rewriteµÄ¶¨Ïò»á¸ù¾İËûÃÇÔÚÅäÖÃÎÄ¼şÖĞ³öÏÖµÄË³ĞòÒÀ´ÎÖ´ĞĞ
-
 Í¨¹ıÊ¹ÓÃflag¿ÉÒÔÖÕÖ¹¶¨Ïòºó½øÒ»²½µÄ´¦Àí
-
 Èç¹ûreplacementÒÔ¡°http://¡±, ¡°https://¡±, or ¡°$scheme¡±¿ªÍ·£¬´¦Àí½«»áÖÕÖ¹£¬ÇëÇó½á¹û»áÒÔÖØ¶¨ÏòµÄĞÎÊ½·µ»Ø¸ø¿Í»§¶Ë£¨client£©
-
-Èç¹ûreplacement×Ö·û´®ÀïÓĞĞÂµÄrequest²ÎÊı£¬ÄÇÃ´Ö®Ç°µÄ²ÎÊı»á¸½¼Óµ½ÆäºóÃæ£¬Èç¹ûÒª±ÜÃâÕâÖÖÇé¿ö£¬ÄÇ¾ÍÔÚreplacement×Ö·û´®ºóÃæ¼ÓÉÏ¡°£¿¡±£¬eg£º
- rewrite ^/users/(.*)$ /show?user=$1? last;=
+Èç¹ûreplacement×Ö·û´®ÀïÓĞĞÂµÄrequest²ÎÊı£¬ÄÇÃ´Ö®Ç°µÄ²ÎÊı»á¸½¼Óµ½ÆäºóÃæ£¬Èç¹ûÒª±ÜÃâÕâÖÖÇé¿ö£¬ÄÇ¾ÍÔÚreplacement×Ö·û´®ºóÃæ¼ÓÉÏ¡°£¿¡±£¬
+    eg£º rewrite ^/users/(.*)$  /show?user=$1? last;
 Èç¹ûÕıÔò±í´ïÊ½£¨regex£©Àï°üº¬¡°}¡± or ¡°;¡±×Ö·û£¬ĞèÒªÓÃµ¥ÒıºÅ»òÕßË«ÒıºÅ°ÑÕıÔò±í´ïÊ½ÒıÆğÀ´
 
+
 Òª°Ñ http://www.test.com/a/b?id=123 µÄÒ»ÌõÁ´½Ó×ª»»³É http://www.test.com/p-123.html
-
 ÔÚnginxÖĞÊÇÓĞÌØÊâÂß¼­£¬ËüÓÃ$query_stringÀ´±íÊ¾ÎÊºÅÒÔºóµÄ×Ö·û£¬¼´"id=123"
-
-if ($request_uri ~* "^/a/b\?id=(\d+)$") {
-                set $myarg1 $1;
-                rewrite .* http://www.test.com/p-$myarg1.html? permanent;
-        }
+    if ($request_uri ~* "^/a/b\?id=(\d+)$") {
+        set $myarg1 $1;
+        rewrite .* http://www.test.com/p-$myarg1.html? permanent;
+    }
 
 ×¢Òâ£¬set $myarg1 $1; Õâ¾ä»°²»ÄÜÉÙ£¬²»ÄÜÖ±½ÓÓÃ$1£¬»á³ö´íµÄ¡£
 
 
-ÖØĞ´¹æÔòÓï·¨£º rewrite ÕıÔò Ìæ»» ±êÖ¾Î»
-
-(1). ÈÎºÎÖØĞ´¹æÔòµÚÒ»²¿·Ö¿Ï¶¨ÊÇ ÕıÔò±í´ïÊ½
-¿ÉÒÔÓÃ()À´²¶»ñÕıÔò±í´ïÊ½£¬È»ºóÔÚrewriteºóÃæ¾ÍÓÃ $[d+] À´ÓÃÕâ¸öÕıÔò±í´ïÊ½£»±ÈÈç£º
-
-^/images/([a-z]{2})/([a-z0-9]{5})/(.*)\.(png|jpg|gif)$   ---->http://xxxx.com/images/aa/abc01/test.gif   
-#ÆäÖĞ   
-$1=([a-z]{2})      #$1=aa  
-$2=([a-z0-9]{5})   #$2=abc01  
-$3=(.*)            #$3=test  
-$4=(png|jpg|gif)   #$4=gif
-ÉÏÃæµÄ4¸öµØ¶Î¶¼ÊÇquery ´®ÖĞÆ¥ÅäµÄ×Ö·û´®  
-
-(2). ÖØĞ´¹æÔòµÄµÚ¶ş²¿·ÖÊÇURI(rewrite ÖØĞ´ºóurl)
-
-query ÇëÇó´®±»¸ÄĞ´£¬°üÀ¨ÉÏÃæÕıÔò±í´ïÊ½»ñÈ¡µÄ²ÎÊı×Ö¶ÎºÍnginx Ïà¹ØµÄÅäÖÃ£¬
-
-/data?file=$3.$4   # rewriteÖ®ºóµÄquery http://data?file=test.gif
-rewrite Ö®ºó»á·µ»Ø¸ø¿Í»§¶Ë301 »òÕß302  [ »á²»»á·µ»Ø200]
-
-(3). ÖØĞ´¹æÔòµÄµÚÈı²¿·ÖÊÇ£ºÎ²²¿µÄ±ê¼Ç  flag last return break
-laster ±ê¼ÇÖ®ºó»á´ÓĞÂloaction £¬¼ÌĞørewrite ×î¶à10´Î
-
-rewrite '^/images/([a-z]{2})/([a-z0-9]{5})/(.*)\.(png|jpg|gif)$' /data?file=$3.$4 last;  
-#<pre name="code" class="html">http://xxxx.com/images/aa/abc01/test.gif   -----rewrite---> http://data?file=test.gif
 
 break±ê¼ÇÊÇÖ±½ÓÌø²ÛrewriteºÍlocaltion ½øĞĞqueryµÄ´¦Àí
 if ($bwhog) {  
@@ -133,7 +134,9 @@ return±ê¼ÇÍ£Ö¹rewrite ´¦ÀíÖ¸Áî£¬½ø¶ø¿ØÖÆÖ÷HTTP Ä£¿é´¦ÀíÇëÇó£¬Ò²¾ÍÊÇHTTPÇëÇóÒ²²»´
 location = /image404.html {  
     return 404 "image not found\n";  
 }
-(4). Õû¸ö¹ı³ÌµÄÊµÀı
+
+
+Õû¸ö¹ı³ÌµÄÊµÀı
 http {  
     server {  
         root /home/www;  
@@ -159,7 +162,72 @@ http {
 }
 
 
+proxy_pass:
+    Syntax:    proxy_pass URL;
+    Default:    ¡ª
+    Context:    location, if in location, limit_except
+    1¡¢²»Ó°Ïìä¯ÀÀÆ÷µØÖ·À¸µÄurl
+    2¡¢ÉèÖÃ±»´úÀíserverµÄĞ­ÒéºÍµØÖ·£¬URL¿ÉÑ¡
+    3¡¢Ğ­Òé¿ÉÒÔÎªhttp¡¢https
+    4¡¢µØÖ·¿ÉÒÔÎªÓòÃû»òIP£¬¶Ë¿Ú¿ÉÑ¡
+    5¡¢Èç¹ûÒ»¸öÓòÃû¿ÉÒÔ½âÎöµ½¶à¸öµØÖ·£¬ÄÇÃ´ÕâĞ©µØÖ·»á±»ÂÖÁ÷Ê¹ÓÃ
+
+¼ÙÉèÏÂÃæËÄÖÖÇé¿ö·Ö±ğÓÃ http://192.168.1.1/proxy/test.html ½øĞĞ·ÃÎÊ¡£
+µÚÒ»ÖÖ£º
+    location /proxy/ {
+        proxy_pass http://127.0.0.1/;
+    }
+´úÀíµ½URL£ºhttp://127.0.0.1/test.html
+
+
+µÚ¶şÖÖ£¨Ïà¶ÔÓÚµÚÒ»ÖÖ£¬×îºóÉÙÒ»¸ö / £©
+    location /proxy/ {
+        proxy_pass http://127.0.0.1;
+    }
+´úÀíµ½URL£ºhttp://127.0.0.1/proxy/test.html
+
+
+µÚÈıÖÖ£º
+    location /proxy/ {
+        proxy_pass http://127.0.0.1/aaa/;
+    }
+´úÀíµ½URL£ºhttp://127.0.0.1/aaa/test.html
+
+
+µÚËÄÖÖ£¨Ïà¶ÔÓÚµÚÈıÖÖ£¬×îºóÉÙÒ»¸ö / £©
+    location /proxy/ {
+        proxy_pass http://127.0.0.1/aaa;
+    }
+´úÀíµ½URL£ºhttp://127.0.0.1/aaatest.html
+ÔÚnginxÖĞÅäÖÃproxy_pass´úÀí×ª·¢Ê±£¬Èç¹ûÔÚproxy_passºóÃæµÄurl¼Ó/£¬±íÊ¾¾ø¶Ô¸ùÂ·¾¶£»Èç¹ûÃ»ÓĞ/£¬±íÊ¾Ïà¶ÔÂ·¾¶£¬°ÑÆ¥ÅäµÄÂ·¾¶²¿·ÖÒ²¸ø´úÀí×ß¡£
 
 
 
+return£º
+    Syntax:    return code [text];
+            return code URL;
+            return URL;
+    Default: ¡ª
+    Context:    server, location, if
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
