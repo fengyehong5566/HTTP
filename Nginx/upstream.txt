@@ -1,0 +1,30 @@
+http {
+	...
+	upstream backend {
+		[ip_hash/]
+		server  IP1[:port]
+		server  IP2[:port]
+		...
+		[fair]
+		[hash $request_uri;  hash_method crc32;]   #hash_method是使用的hash算法
+	}
+	...
+}
+
+策略：
+	轮询[默认]
+	权重轮询	weight= 2
+	ip_hash
+	fair[第三方]
+	url_hash[第三方]:按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存服务器时比较有效。
+	
+	
+设备状态：
+	1、down：表示单前的server暂时不参与负载
+	2、weight：权重，默认为1， weight越大，负载的权重就越大。
+	3、max_fails：默认为1，允许请求失败的次数。当超过最大次数时，返回proxy_next_upstream 模块定义的错误。
+	4、fail_timeout：默认为10
+	5、backup：当主服务器不能使用时传递请求
+Nginx基于连接探测，如果发现后端异常，在单位周期为fail_timeout设置的时间，中达到max_fails次数，这个周期次数内，如果后端同一个节点不可用，那么接将把节点标记为不可用，并等待下一个周期（同样时常为fail_timeout）再一次去请求，判断是否连接是否成功。如果成功，将恢复之前的轮询方式，如果不可用将在下一个周期(fail_timeout)再试一次。
+
+keepalive：该参数开启与上游服务器之间的连接池，其数值为每个nginx worker可以保持的最大连接数。如果keepalive设置为16，则总的线程数为 16*nginx_worker
