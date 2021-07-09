@@ -1,96 +1,159 @@
+nginx代理后端服务
+nginx 服务器及端口 127.0.0.1:80
+后端服务:127.0.0.1:8080
+测试url:http://127.0.0.1:80/day06api/api/abc
+
+A.配置
+nginx配置如下：
+
+location /day06api/ {
+   proxy_pass http://127.0.0.1:8080/;
+}
+实际访问的端口服务：http://127.0.0.1:8080/api/abc
+
+B.配置
+location /day06api {
+   proxy_pass http://127.0.0.1:8080/;
+}
+实际访问的端口服务：http://127.0.0.1:8080//api/abc
+
+C.配置
+location /day06api/ {
+   proxy_pass http://127.0.0.1:8080;
+}
+实际访问的端口服务：http://127.0.0.1:8080/day06api/api/abc
+
+D.配置
+location /day06api {
+   proxy_pass http://127.0.0.1:8080;
+}
+实际访问的端口服务：http://127.0.0.1:8080/day06api/api/abc
+
+E.配置
+location /day06api/ {
+   proxy_pass http://127.0.0.1:8080/server/;
+}
+实际访问的端口服务：http://127.0.0.1:8080/server/api/abc
+
+F.配置
+location /day06api {
+   proxy_pass http://127.0.0.1:8080/server/;
+}
+实际访问的端口服务：http://127.0.0.1:8080/server//api/abc
+
+G.配置
+location /day06api/ {
+   proxy_pass http://127.0.0.1:8080/server;
+}
+实际访问的端口服务：http://127.0.0.1:8080/serverapi/abc
+
+H.配置
+location /day06api {
+   proxy_pass http://127.0.0.1:8080/server;
+}
+实际访问的端口服务：http://127.0.0.1:8080/server/api/abc
+
+
+
 
  
+ 
+ 
+ 
+ 
+ 
+ 
 
-Nginx ����� location ָ��Ĳ�������������� URI����ʹ��ƥ�䵽�� location ָ�location ��ͨ������Ƕ�ף�ʵ�ֶ�����ķ��鴦���� 
+Nginx 会根据 location 指令的参数来测试请求的 URI，并使用匹配到的 location 指令。location 块通常可以嵌套，实现对请求的分组处理。 
 
-location ָ�������ֲ�����ǰ׺�ַ�����·���������������ʽ��
-�������ʽ
-    �﷨���� location [=|~|~*|^~] /uri/ { �� }
-    ǰ׺�ַ��������ȼ�:
-        =����ȷƥ�䣬���ȼ���ߡ�����ҵ��������ȷƥ�䣬��ֹͣ���ҡ�
-        ^~��URI ��ĳ�������ַ�����ͷ����������ƥ��
-        ~�����ִ�Сд������ƥ��
-        ~*�������ִ�Сд������ƥ��
-        !~��!~*�ֱ�Ϊ���ִ�Сд��ƥ�估�����ִ�Сд��ƥ�� ������
-        /��ͨ��ƥ��, ���ȼ���͡��κ����󶼻�ƥ�䵽�������
+location 指令有两种参数：前缀字符串（路径名）和正则表达式。
+正则表达式
+    语法规则： location [=|~|~*|^~] /uri/ { … }
+    前缀字符串及优先级:
+        =：精确匹配，优先级最高。如果找到了这个精确匹配，则停止查找。
+        ^~：URI 以某个常规字符串开头，不是正则匹配
+        ~：区分大小写的正则匹配
+        ~*：不区分大小写的正则匹配
+        !~和!~*分别为区分大小写不匹配及不区分大小写不匹配 的正则
+        /：通用匹配, 优先级最低。任何请求都会匹配到这个规则
 
-    ���ȼ�Ϊ�� = > ����·�� > ^~ > ~  ~*  !~   !~* > ������ʼ·�� > /
-
-
-ƥ��˳���ܽ�Ϊ�������㣺
-    1.ƥ���˳������ƥ����ͨ�ַ�����Ȼ����ƥ���������ʽ��������ͨ�ַ���ƥ��˳���Ǹ����������ַ����ȴӳ����̣�Ҳ����˵ʹ����ͨ�ַ������õ�location˳�����޹ؽ�Ҫ�ģ��������nginx��������õĳ���������ƥ�䣬������Ҫע������������ʽ���������ļ����˳����ԡ��ҵ���һ��ƥ����������ʽ��ֹͣ������
-
-    2.һ������£�ƥ��ɹ�����ͨ�ַ���location�󻹻�����������ʽlocationƥ�䡣�����ַ����ı�������Ϊ����һ����ʹ�á�=��ǰ׺����ʱִ�е����ϸ�ƥ�䣬����ƥ��ɹ�������ֹͣ����ƥ�䣬ͬʱ���������������һ�־���ʹ�á�^~��ǰ׺����������ǰ׺����һ�������ַ�����ô����nginx ���·��ƥ����ô�������������ʽ��
-
-
-
-����:
-����location����ͨlocation
-    ����location  ��~���͡�~*����
-        ��~����ʾ���ִ�Сд��
-        ��~*����ʾ�����ִ�Сд��
-    ��ͨlocation:
-        ������������ȫ��(����û��ǰ׺) ��=������^~������@��
-
-��^~���еġ�^����ʾ�ǣ���~����ʾ������˼Ϊ��Ҫ����ƥ������
-
-��=��Ҳ��ʾ��ֹ����location���͡�^~��������Ϊ����^~����Ȼ���ء����ǰ׺��ƥ�䣻����=���������ϸ�ƥ�䡣
-
-��@ �����������塰Named Location ���ģ���������Ϊ�����ڡ���ͨlocation���͡�����location��֮��ĵ��������ͣ������֡�Named Location ����������������ͨ��HTTP ����ģ�����ר�������������ڲ��ض���internally redirected ��������ġ�
-
-ע�⣺����˵�ġ��ڲ��ض���internally redirected �����ǲ���Ҫ������������ģ������Ƿ���˵�һ��ת����Ϊ��
+    优先级为： = > 完整路径 > ^~ > ~  ~*  !~   !~* > 部分起始路径 > /
 
 
-ע�⣺
-1.nginxƥ��˳������ƥ����ͨlocation����ƥ������location��
-2.��ͨƥ�������˳������д�������ļ����Ǹ��ط���һ������������ƥ�����ǰ���ƥ�������ļ������ϵ��µ��Ⱥ�˳��ƥ�䣻
+匹配顺序总结为以下两点：
+    1.匹配的顺序是先匹配普通字符串，然后再匹配正则表达式。另外普通字符串匹配顺序是根据配置中字符长度从长到短，也就是说使用普通字符串配置的location顺序是无关紧要的，反正最后nginx会根据配置的长短来进行匹配，但是需要注意的是正则表达式按照配置文件里的顺序测试。找到第一个匹配的正则表达式将停止搜索。
+
+    2.一般情况下，匹配成功了普通字符串location后还会进行正则表达式location匹配。有两种方法改变这种行为，其一就是使用“=”前缀，这时执行的是严格匹配，并且匹配成功后立即停止其他匹配，同时处理这个请求；另外一种就是使用“^~”前缀，如果把这个前缀用于一个常规字符串那么告诉nginx 如果路径匹配那么不测试正则表达式。
 
 
-location ƥ��ԭ��
-    1 �����е�ǰ׺�ַ������� URI��
-    2 �Ⱥ� = ������ǰ׺�ַ����� URI �ľ�ȷƥ���ϵ������ҵ��������ȷƥ�䣬��ֹͣ���ҡ�
-    3 ��� ^~ ���η�Ԥ��ƥ�䵽���ǰ׺�ַ������򲻼���������ʽ��
-    4 �洢���ƥ��ǰ׺�ַ�����
-    5 ���������ʽ���� URI��
-    6 ƥ�䵽��һ���������ʽ��ֹͣ���ң�ʹ�ö�Ӧ�� location��
-    7 ���û��ƥ�䵽�������ʽ����ʹ��֮ǰ�洢��ǰ׺�ַ�����Ӧ�� location��
-    8 �Ⱥ� = �������;���� / (forward slash)������� / ������ܶ࣬���԰� = / ָ��Ϊ location �Ĳ����������Ӧ�ٶȡ���Ϊ�ڵ�һ�αȽ�֮���ֹͣ����ƥ�䡣
+
+分类:
+正则location和普通location
+    正则location  “~”和“~*”：
+        “~”表示区分大小写；
+        “~*”表示不区分大小写；
+    普通location:
+        除了上面其余全是(包括没有前缀) “=”，“^~”，“@”
+
+“^~”中的“^”表示非，“~”表示正则，意思为不要继续匹配正则
+
+“=”也表示阻止正则location，和“^~”的区别为：“^~”依然遵守“最大前缀”匹配；而“=”必须是严格匹配。
+
+“@ ”是用来定义“Named Location ”的（可以理解为独立于“普通location”和“正则location”之外的第三种类型），这种“Named Location ”不是用来处理普通的HTTP 请求的，它是专门用来处理“内部重定向（internally redirected ）”请求的。
+
+注意：这里说的“内部重定向（internally redirected ）”是不需要跟浏览器交互的，纯粹是服务端的一个转发行为。
 
 
-root ��aliasָ������
+注意：
+1.nginx匹配顺序是先匹配普通location，在匹配正则location；
+2.普通匹配规则无顺序无论写在配置文件的那个地方都一样，但是正则匹配则是按照匹配配置文件中由上到下的先后顺序匹配；
+
+
+location 匹配原则
+    1 用所有的前缀字符串测试 URI。
+    2 等号 = 定义了前缀字符串和 URI 的精确匹配关系。如果找到了这个精确匹配，则停止查找。
+    3 如果 ^~ 修饰符预先匹配到最长的前缀字符串，则不检查正则表达式。
+    4 存储最长的匹配前缀字符串。
+    5 用正则表达式测试 URI。
+    6 匹配到第一个正则表达式后停止查找，使用对应的 location。
+    7 如果没有匹配到正则表达式，则使用之前存储的前缀字符串对应的 location。
+    8 等号 = 最常见的用途就是 / (forward slash)。如果对 / 的请求很多，可以把 = / 指定为 location 的参数来提高响应速度。因为在第一次比较之后就停止搜索匹配。
+
+
+root 、alias指令区别：
 
     location /img/ {
         alias /var/www/image/;
     }
-#�������������õĻ��������/img/Ŀ¼������ļ�ʱ��ningx���Զ�ȥ/var/www/image/Ŀ¼���ļ�
+#若按照上述配置的话，则访问/img/目录里面的文件时，ningx会自动去/var/www/image/目录找文件
     location /img/ {
         root /var/www/image;
     }
-#�������������õĻ��������/img/Ŀ¼�µ��ļ�ʱ��nginx��ȥ/var/www/image/img/Ŀ¼�����ļ���] 
-alias��һ��Ŀ¼�����Ķ��壬root�������ϲ�Ŀ¼�Ķ��塣
+#若按照这种配置的话，则访问/img/目录下的文件时，nginx会去/var/www/image/img/目录下找文件。] 
+alias是一个目录别名的定义，root则是最上层目录的定义。
 
-����һ����Ҫ��������alias�������Ҫ�á�/��������������Ҳ����ļ��ġ�������root����п���
+还有一个重要的区别是alias后面必须要用“/”结束，否则会找不到文件的。。。而root则可有可无
 
 
-root ָ��� proxy_pass ָ��
-location �������п��Զ��崦�������ṩ��̬�ļ���ת��������������ķ���������ָ�
+root 指令和 proxy_pass 指令
+location 上下文中可以定义处理请求（提供静态文件或转发请求给被代理的服务器）的指令。
 
 server {
-    # ��Ӧ��̬�ļ�
+    # 响应静态文件
     location /images/ {
         root /data;
     }
-    # ת������ http://www.example.com
+    # 转发请求到 http://www.example.com
     location / {
         proxy_pass http://www.example.com;
     }
 }
 
-4.1 root ָ��
-root ָ��ָ����̬�ļ����ļ�ϵͳ�е�·��������� URI �У��� location ��صĲ��ֻ�� root ָ����·����ϳ�������Ŀ¼�����ļ������Ӷ���ȡ����̬�ļ������磬����������ж� /images/example.png �����󣬻��Ӧ�ļ� /data/images/example.png��
+4.1 root 指令
+root 指令指定静态文件在文件系统中的路径。请求的 URI 中，和 location 相关的部分会和 root 指定的路径组合成完整的目录名和文件名，从而获取到静态文件。例如，上面的例子中对 /images/example.png 的请求，会对应文件 /data/images/example.png。
 
-4.2 proxy_pass ָ��
-proxy_pass ָ�����ת������ URL ������ı������ķ�������Ȼ��ѱ������ķ���������Ӧת�����ͻ��ˡ�����������У����� URI ���� /images/ ��ͷ�����󣬶��ᱻת�����������ķ�������
+4.2 proxy_pass 指令
+proxy_pass 指令将请求转发给和 URL 相关联的被代理的服务器，然后把被代理的服务器的响应转发给客户端。上面的例子中，所有 URI 不以 /images/ 开头的请求，都会被转发给被代理的服务器。
 
 
 
